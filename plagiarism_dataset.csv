@@ -1,0 +1,11 @@
+Original,Submission,Similarity,Label
+The quick brown fox jumps over the lazy dog.,The quick brown fox jumps over the lazy dog.,1.0000000000000002,1
+Climate change affects weather and biodiversity.,Climate change affects weather and biodiversity.,1.0000000000000002,1
+Artificial intelligence is changing how we live.,Artificial intelligence is changing how we live.,1.0000000000000004,1
+Machine learning algorithms can learn from data.,Algorithms in machine learning improve by studying data.,0.368023208756115,1
+Global warming leads to rising temperatures worldwide.,The planet is heating due to global warming.,0.2532094495161745,1
+The sun provides energy to the earth.,Solar panels convert sunlight into electricity.,0.0,0
+Water is essential for life.,"Plants need water, sunlight, and carbon dioxide to grow.",0.08176804146599938,0
+Python is a popular programming language.,Mount Everest is the tallest mountain.,0.10163066979112656,0
+He loves to play cricket.,Artificial intelligence can beat humans at chess.,0.0,0
+I enjoy listening to music.,Quantum computing uses qubits.,0.0,0
