@@ -1,0 +1,27 @@
+# kong.yml - Declarative Configuration for Kong
+_format_version: "3.0"
+
+services:
+- name: assignment-service
+  # Points to your API container on port 8501
+  url: http://my-api:8501
+
+  routes:
+  - name: assignment-route
+    # Kong will listen for requests on http://localhost:8000/api
+    paths:
+    - /api
+
+  # --- ASSIGNMENT PLUGIN 1: RATE LIMITING (5 requests per minute) ---
+  plugins:
+  - name: rate-limiting
+    config:
+      minute: 5
+      policy: local # Simple, local storage
+      limit_by: ip  # Limits based on the client's IP address
+
+  # --- ASSIGNMENT PLUGIN 2: REQUEST SIZE LIMITING (100 kilobytes max) ---
+  - name: request-size-limiting
+    config:
+      allowed_payload_size: 100
+      size_unit: kilobytes
