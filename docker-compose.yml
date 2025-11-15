@@ -1,43 +1,33 @@
 version: "3.8"
 services:
-  # 1. Kong's Database (Starts here, level 1 indentation)
-  kong-db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: kong
-      POSTGRES_DB: kong
-      POSTGRES_PASSWORD: mysecretpassword
-    healthcheck:
-      test: ["CMD", "pg_isready", "-U", "kong"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
-
-  # --- Horizontal separator ---
-
-  # 2. Your API Service (Starts here, level 1 indentation - MUST be aligned with kong-db)
+  # 1. Your API Service
   my-api:
-    image: plagiarism-checker-api
+    image: plagiarism-checker-api # <-- REPLACE THIS with your actual image name
     ports:
       - "8501:8501"
+    # Use restart policy to ensure it comes back up
+    restart: always
 
-  # --- Horizontal separator ---
-
-  # 3. Kong Gateway (Starts here, level 1 indentation - MUST be aligned with kong-db)
+  # 2. Kong Gateway (DB-less Mode)
   kong:
     image: kong:latest
     environment:
-      KONG_DATABASE: postgres
-      KONG_PG_HOST: kong-db
-      KONG_PG_PASSWORD: mysecretpassword
+      # Use DB-less mode
+      KONG_DATABASE: "off"
+      # Point Kong to the declarative configuration file
+      KONG_DECLARATIVE_CONFIG: "/etc/kong/kong.yml"
       KONG_PROXY_ACCESS_LOG: /dev/stdout
       KONG_PROXY_ERROR_LOG: /dev/stderr
       KONG_ADMIN_LISTEN: 0.0.0.0:8001
     ports:
-      - "8000:8001"
+      - "8000:8000" # Client Proxy Port
+      - "8001:8001" # Admin Port (for troubleshooting only)
+    # Mount the kong.yml file into the container
+    volumes:
+      - ./kong.yml:/etc/kong/kong.yml
     depends_on:
-      kong-db:
-        condition: service_healthy
       my-api:
         condition: service_started
-    command: "kong start --v"
+    # Simple start command
+    command: "kong start"
+    restart: always

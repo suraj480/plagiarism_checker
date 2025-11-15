@@ -1,14 +1,14 @@
-# kong.yml - Declarative Configuration for Kong
+# kong.yml - Declarative Configuration for Kong (DB-less Mode)
 _format_version: "3.0"
 
 services:
 - name: assignment-service
-  # Points to your API container on port 8501
+  # The URL of your API running inside the Docker network.
   url: http://my-api:8501
 
   routes:
   - name: assignment-route
-    # Kong will listen for requests on http://localhost:8000/api
+    # Clients access this via http://localhost:8000/api
     paths:
     - /api
 
@@ -17,8 +17,9 @@ services:
   - name: rate-limiting
     config:
       minute: 5
-      policy: local # Simple, local storage
-      limit_by: ip  # Limits based on the client's IP address
+      # Local policy is fine for DB-less mode
+      policy: local
+      limit_by: ip
 
   # --- ASSIGNMENT PLUGIN 2: REQUEST SIZE LIMITING (100 kilobytes max) ---
   - name: request-size-limiting
